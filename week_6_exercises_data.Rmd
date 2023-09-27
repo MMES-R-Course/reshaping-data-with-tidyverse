@@ -1,0 +1,31 @@
+---
+title: "week_6_exercises_data"
+author: "J.Blondeau"
+date: "2023-09-17"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+
+1. Read in parrotfish.csv data set.  This data set represents the density of 13 parrotfish species observed by divers at each sample (PRIMARY_SAMPLE_UNIT) in 2021.  This might be a typical way you would be given some data.  
+
+2. Using the pivot_longer function, reshape the data frame structure to look like....
+
+|YEAR|REGION|STRAT|PROT|PRIMARY_SAMPLE_UNIT|SPECIES_CD|density|
+|:--:|:----:|:--------:|:--:|:-----------------:|:--------:|:-----:|
+|2021|STTSTJ|AGRF_DEEP |0   |5021               |SPA VIRI  |7    |
+
+3. Using your new dataframe created from #2, what is the mean number of parrotfish in each STRAT?  Think through the problem first to develop your steps to find a solution.
+
+4. Using the pivot_wider function, reshape the dataframe structure created from #2 to look like the original parrotfish.csv you imported.  However, instead of SPECIES_CD as each column name, I want them to be Scientific Name.  **Hint**: you will need the taxonomic.csv data set.
+
+5. The parrotfish.csv data set from #1 has a STRAT field that represents a habitat component and a depth category component.  Separate the STRAT field into two columns "HABITAT" and "DEPTHCAT" while retaining the original STRAT column.
+
+6. The parrotfish.csv data set from #1 has two fields YEAR and PRIMARY_SAMPLE_UNIT.  Our NCRMP data reuses the PRIMARY_SAMPLE_UNIT numbers every year.  Create a new data frame that concatenates the YEAR and PRIMARY_SAMPLE_UNIT fields into field called "ID" while retaining the original fields.  
+    - Knowing that we reuse numbers for PRIMARY_SAMPLE_UNITS every year, what would happen if you had a dataset with multiple years of data and were asked to group_by() on the PRIMARY_SAMPLE_UNIT field but **did not** first concatenate the YEAR and PRIMARY_SAMPLE_UNIT fields?. 
+    

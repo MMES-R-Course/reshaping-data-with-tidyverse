@@ -1,0 +1,52 @@
+---
+title: "week_6_exercises_GIS"
+author: "J.Blondeau"
+date: "2023-09-24"
+output: html_document
+---
+
+***
+## Data
+All the data is the shared OneDrive under Week_5 and include...
+
+4 shapefiles
+
+- NOAA_Habitiat_Map
+- VI_National_Monument
+- VI_National_Park
+- sttstj_sampleframe
+
+1 .csv file
+
+- sttstj_benthic_sites_2021.csv
+
+**
+
+The exercises today will use the new tools we discussed in lecture as well as previous tools you already learned.
+
+### Part 1
+1. Import all the data into your project directory (4 shapefiles).
+
+    - What is the percentage of Coral Reef and Colonized Hardbottom in each of the unique Marine Protected Areas (national parks and monument)?
+    <br><br>
+    Hint:  Inspect each shapefile separatley, what are the attributes of each, could they be renamed for clarity, think through the entire workflow first before you start geoprocessing, write it out if needed, the order of operations wiil be important 
+    
+    
+
+
+### Part 2
+1. Create a shapefile (point) from the sttstj_benthic_sites_2021.csv dataset.
+2. The sttstj_sampleframe is a 50x50m gridded data set that serves as NCRMP's sampling domain.  It contains additional metadata that the actual sampling points to not have.  The sampling frame further divides St Thomas/John into SUB_REGIONS and administrative zones (ADMIN) to help allocate our sampleing effort.                
+    
+    - How many benthic sites (PRIMARY_SAMPLE_UNITS) were sampled in 2021 in each ADMIN? How many benthic sites were sampled in each SUB_REGION?  
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
