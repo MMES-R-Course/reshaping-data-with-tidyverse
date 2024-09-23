@@ -7,7 +7,7 @@ output: html_document
 
 ***
 ## Data
-All the data is the shared OneDrive under Week_5 and include...
+All the data is the shared OneDrive under Week_6 and include...
 
 4 shapefiles
 

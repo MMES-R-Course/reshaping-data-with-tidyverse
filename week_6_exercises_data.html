@@ -11,7 +11,7 @@
 
 <meta name="author" content="J.Blondeau" />
 
-<meta name="date" content="2023-09-17" />
+<meta name="date" content="2024-09-26" />
 
 <title>week_6_exercises_data</title>
 
@@ -352,7 +352,7 @@ display: none;
 
 <h1 class="title toc-ignore">week_6_exercises_data</h1>
 <h4 class="author">J.Blondeau</h4>
-<h4 class="date">2023-09-17</h4>
+<h4 class="date">2024-09-26</h4>
 
 </div>
 
@@ -398,11 +398,11 @@ created from #2 to look like the original parrotfish.csv you imported.
 However, instead of SPECIES_CD as each column name, I want them to be
 Scientific Name. <strong>Hint</strong>: you will need the taxonomic.csv
 data set.</p></li>
-<li><p>The parrotfish.csv data set from #1 has a STRAT field that
+<li><p>The parrotfish.csv data set from #2 has a STRAT field that
 represents a habitat component and a depth category component. Separate
 the STRAT field into two columns “HABITAT” and “DEPTHCAT” while
 retaining the original STRAT column.</p></li>
-<li><p>The parrotfish.csv data set from #1 has two fields YEAR and
+<li><p>The parrotfish.csv data set from #2 has two fields YEAR and
 PRIMARY_SAMPLE_UNIT. Our NCRMP data reuses the PRIMARY_SAMPLE_UNIT
 numbers every year. Create a new data frame that concatenates the YEAR
 and PRIMARY_SAMPLE_UNIT fields into field called “ID” while retaining
@@ -414,6 +414,10 @@ were asked to group_by() on the PRIMARY_SAMPLE_UNIT field but
 <strong>did not</strong> first concatenate the YEAR and
 PRIMARY_SAMPLE_UNIT fields?.</li>
 </ul></li>
+<li><p><strong>Bonus</strong>: The depth class (embedded in the strat)
+represents depths shallower or greater than or equal to 12 meters. On
+average, do we observe more parrotfish species in the shallower or
+deeper depths?</p></li>
 </ol>
 
 
