@@ -1,0 +1,311 @@
+---
+title: "Data Wrangling and Visualization in R"
+subtitle: "Reshaping Data with Tidyverse"
+author: "MMES Fall 2025"
+format: 
+  revealjs:
+    theme: simple
+    slide-number: true
+    chalkboard: true
+---
+
+## What is Data Reshaping?
+
+Often, your dataset isn't in the right format for the analysis or plot you want to create. Data reshaping is the process of changing the layout of your data frame to make it suitable for your task.
+
+---
+
+## Wide vs. Long Data
+
+The two most common layouts are **wide** and **long**.
+
+-   **Wide**: Each row represents an observation (e.g., a site), and each variable has its own column. This is often how data is recorded.
+-   **Long**: Each row represents a single observation of a single variable. This is the "Tidy" format and is preferred by `ggplot2` and many `dplyr` functions.
+
+---
+
+## Today's Agenda
+
+We will focus on four key functions from the `tidyr` package (part of the Tidyverse) for reshaping data:
+
+-   `pivot_longer()`: Converts data from wide to long format.
+-   `pivot_wider()`: Converts data from long to wide format.
+-   `separate()`: Splits one column into multiple columns.
+-   `unite()`: Combines multiple columns into one.
+
+---
+
+## `pivot_longer()`
+
+`pivot_longer()` makes your data "longer" by collapsing multiple columns into two new columns: one for the names of the original columns (the "key") and one for their values.
+
+**Why make data longer?**
+-   It's the "Tidy" data format.
+-   It's required for many `ggplot2` visualizations.
+-   It makes filtering and summarizing by variable much easier.
+
+---
+
+## `pivot_longer()`: Example
+
+Imagine we have data on coral cover for different species at several sites.
+
+```{r, echo=TRUE, eval=TRUE}
+library(tidyverse)
+coral_cover_wide <- tibble(
+  site = c("Reef Bay", "Lameshur Bay"),
+  `Acropora palmata` = c(25, 18),
+  `Orbicella faveolata` = c(15, 22),
+  `Diploria strigosa` = c(10, 14)
+)
+coral_cover_wide
+```
+
+This is **wide** data. Let's make it long.
+
+---
+
+## `pivot_longer()`: The Code
+
+We tell `pivot_longer()` which columns to gather and what to name the two new columns.
+
+```{r, echo=TRUE, eval=TRUE}
+coral_cover_long <- coral_cover_wide %>%
+  pivot_longer(
+    cols = -site, # Pivot all columns EXCEPT site
+    names_to = "species_name", # New column for the original column names
+    values_to = "percent_cover" # New column for the values
+  )
+coral_cover_long
+```
+
+This long format is now ready for plotting with `ggplot2`!
+
+---
+
+## `pivot_wider()`
+
+`pivot_wider()` does the opposite: it makes your data "wider" by taking values from two columns and spreading them out into new columns.
+
+**Why make data wider?**
+-   It can be easier for humans to read in a report.
+-   Some statistical analyses or software (like PRIMER) require wide-format data.
+-   It's a key step in some advanced wrangling tasks.
+
+---
+
+## `pivot_wider()`: Example
+
+Let's take our long-format coral cover data and pivot it back to the original wide format.
+
+```{r, echo=TRUE, eval=TRUE}
+# This is the long data we created
+coral_cover_long
+```
+
+---
+
+## `pivot_wider()`: The Code
+
+We tell `pivot_wider()` which columns contain the new column names and which contain the values.
+
+```{r, echo=TRUE, eval=TRUE}
+# Recreate the original wide format
+coral_cover_long %>%
+  pivot_wider(
+    names_from = species_name, # The column with the new column names
+    values_from = percent_cover # The column with the cell values
+  )
+```
+
+---
+
+## The Problem: Implicit Absences
+
+Sometimes you only record data when a species is present. This results in "implicit absences" – you don't have rows for where a species was looked for but not found. This is common with historical data or survey methods focused on presence-only observations.
+
+---
+
+## The Goal: Making Absences Explicit
+
+Here is our sample presence-only data:
+```{r, echo=TRUE, eval=TRUE}
+# We only recorded the species we saw at each site
+presence_only_data <- tibble(
+  site = c("Site A", "Site A", "Site B", "Site C", "Site C"),
+  species = c("A. palmata", "O. faveolata", "A. palmata", "D. strigosa", "O. faveolata"),
+  seen = c(1, 1, 1, 1, 1)
+)
+presence_only_data
+```
+**Goal**: We need a row for *every combination* of site and species, with a `0` where a species was absent.
+
+---
+
+## The Trick, Step 1: `pivot_wider()`
+
+First, we pivot the data wider. This creates a grid of all sites and all observed species. Crucially, we use `values_fill = 0` to replace the `NA`s (the implicit absences) with `0`.
+
+```{r, echo=TRUE, eval=TRUE}
+wide_with_zeros <- presence_only_data %>%
+  pivot_wider(
+    names_from = species,
+    values_from = seen,
+    values_fill = 0
+  )
+wide_with_zeros
+```
+
+---
+
+## The Trick, Step 2: `pivot_longer()`
+
+Now that we have our complete grid with explicit zeros, we can pivot it back to a long, tidy format.
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**Code**
+```{r, echo=TRUE, eval=FALSE}
+long_and_complete <- wide_with_zeros %>%
+  pivot_longer(
+    cols = -site, 
+    names_to = "species",
+    values_to = "seen"
+  )
+long_and_complete
+```
+:::
+
+::: {.column width="50%"}
+**Output**
+```{r, echo=FALSE, eval=TRUE}
+# Re-creating the intermediate object for the example
+wide_with_zeros <- presence_only_data %>%
+  pivot_wider(
+    names_from = species,
+    values_from = seen,
+    values_fill = 0
+  )
+# Running the code from the left column
+wide_with_zeros %>%
+  pivot_longer(
+    cols = -site,
+    names_to = "species",
+    values_to = "seen"
+  )
+```
+:::
+
+::::
+
+---
+
+## The Trick: The Full Pipeline
+
+In practice, you would chain these two steps together in a single, efficient pipeline.
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**Code**
+```{r, echo=TRUE, eval=FALSE}
+complete_data <- presence_only_data %>%
+  pivot_wider(
+    names_from = species,
+    values_from = seen,
+    values_fill = 0
+  ) %>%
+  pivot_longer(
+    cols = -site,
+    names_to = "species",
+    values_to = "seen"
+  )
+complete_data
+```
+:::
+
+::: {.column width="50%"}
+**Output**
+```{r, echo=FALSE, eval=TRUE}
+# Running the full pipeline
+presence_only_data %>%
+  pivot_wider(
+    names_from = species,
+    values_from = seen,
+    values_fill = 0
+  ) %>%
+  pivot_longer(
+    cols = -site,
+    names_to = "species",
+    values_to = "seen"
+  )
+```
+:::
+
+::::
+
+---
+
+## `separate()`: The Goal
+
+`separate()` splits a single character column into multiple new columns based on a separator.
+
+**Goal**: Split the `transect_id` column into separate `site` and `transect_num` columns.
+
+**Before:**
+```{r, echo=TRUE, eval=TRUE}
+transect_data <- tibble(
+  transect_id = c("SiteA-1", "SiteA-2", "SiteB-1"),
+  coral_count = c(15, 20, 12)
+)
+transect_data
+```
+
+---
+
+## `separate()`: The Code and Result
+
+We tell `separate()` which column to split, what to name the new columns, and what character to split on.
+
+```{r, echo=TRUE, eval=TRUE}
+transect_data %>%
+  separate(
+    col = transect_id, # The column to split
+    into = c("site", "transect_num"), # The names of the new columns
+    sep = "-" # The character to split on
+  )
+```
+
+---
+
+## `unite()`: The Goal
+
+`unite()` does the opposite of `separate()`: it combines multiple columns into a single column.
+
+**Goal**: Combine the `genus` and `species` columns into a single `scientific_name` column.
+
+**Before:**
+```{r, echo=TRUE, eval=TRUE}
+scientific_name_parts <- tibble(
+  family = c("Acroporidae", "Faviidae"),
+  genus = c("Acropora", "Diploria"),
+  species = c("palmata", "strigosa")
+)
+scientific_name_parts
+```
+
+---
+
+## `unite()`: The Code and Result
+
+We tell `unite()` what to name the new column, which columns to combine, and what character to put between the values.
+
+```{r, echo=TRUE, eval=TRUE}
+scientific_name_parts %>%
+  unite(
+    col = "scientific_name", # The name of the new column
+    genus, species,         # The columns to combine
+    sep = " "                # The character to place between values
+  )
+```
