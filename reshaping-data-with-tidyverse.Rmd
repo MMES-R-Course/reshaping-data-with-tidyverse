@@ -1,7 +1,7 @@
 ---
-title: "week_6_exercises_data"
+title: "Reshaping Data with Tidyverse"
 author: "J.Blondeau"
-date: "2024-09-26"
+date: "2025-07-27"
 output: html_document
 ---
 
