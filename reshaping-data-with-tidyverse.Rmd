@@ -1,7 +1,7 @@
 ---
 title: "Reshaping Data with Tidyverse"
 author: "J.Blondeau"
-date: "2025-07-27"
+date: "`r Sys.Date()`"
 output: html_document
 ---
 
@@ -29,5 +29,5 @@ knitr::opts_chunk$set(echo = TRUE)
 6. The parrotfish.csv data set from #2 has two fields YEAR and PRIMARY_SAMPLE_UNIT.  Our NCRMP data reuses the PRIMARY_SAMPLE_UNIT numbers every year.  Create a new data frame that concatenates the YEAR and PRIMARY_SAMPLE_UNIT fields into field called "ID" while retaining the original fields.  
     - Knowing that we reuse numbers for PRIMARY_SAMPLE_UNITS every year, what would happen if you had a dataset with multiple years of data and were asked to group_by() on the PRIMARY_SAMPLE_UNIT field but **did not** first concatenate the YEAR and PRIMARY_SAMPLE_UNIT fields?. 
     
-7. **Bonus**:  The depth class (embedded in the strat) represents depths shallower or greater than or equal to 12 meters.  On average, do we observe more parrotfish species in the shallower or deeper depths?
+7. The depth class (embedded in the strat) represents depths shallower or greater than or equal to 12 meters.  On average, do we observe higher parrotfish species richness in the shallower or deeper depths?
     

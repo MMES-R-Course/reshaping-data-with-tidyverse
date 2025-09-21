@@ -1,7 +1,7 @@
 ---
 title: "Merge, Append and Intersect"
 author: "J.Blondeau"
-date: "2025-07-27"
+date: "`r Sys.Date()`"
 output: html_document
 ---
 
