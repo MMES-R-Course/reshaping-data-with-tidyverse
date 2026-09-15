@@ -2,7 +2,9 @@
 title: "Merge, Append and Intersect"
 author: "J.Blondeau"
 date: "`r Sys.Date()`"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ***
@@ -27,7 +29,7 @@ The exercises today will use the new tools we discussed in lecture as well as pr
 ### Part 1
 1. Import all the data into your project directory (4 shapefiles).
 
-    - What is the percentage of Coral Reef and Colonized Hardbottom in each of the unique Marine Protected Areas (national parks and monument)?
+    - What is the area ($km^2$) of Coral Reef and Colonized Hardbottom in each of the unique Marine Protected Areas (national parks and monument)?
     <br><br>
     Hint:  Inspect each shapefile separatley, what are the attributes of each, could they be renamed for clarity, think through the entire workflow first before you start geoprocessing, write it out if needed, the order of operations wiil be important 
     
